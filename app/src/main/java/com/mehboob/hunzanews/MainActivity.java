@@ -1,8 +1,11 @@
 package com.mehboob.hunzanews;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
@@ -13,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 private ActivityMainBinding binding;
 private String API="a6b3796ea24745ca9d057b47d93f178f";
 private PagerAdapter adapter;
+private static final int MY_PERMISSIONS_REQUEST_INTERNET=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +26,13 @@ private PagerAdapter adapter;
 
          adapter= new PagerAdapter(getSupportFragmentManager(),5);
          binding.frameContainer.setAdapter(adapter);
-
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.INTERNET},
+                    MY_PERMISSIONS_REQUEST_INTERNET);
+        }
 
          binding.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
              @Override
