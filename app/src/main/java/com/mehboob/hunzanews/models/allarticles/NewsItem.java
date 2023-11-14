@@ -7,11 +7,13 @@ import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "allarticle")
+@Entity(tableName = "allarticle",primaryKeys = {"ID"})
 public class NewsItem {
+
+
     @SerializedName("ID")
-    @PrimaryKey(autoGenerate = false)
-    private int id;
+    @ColumnInfo(name = "ID")
+    private int ID;
 
     @SerializedName("post_author")
     @ColumnInfo(name = "post_author")
@@ -21,6 +23,7 @@ public class NewsItem {
     @ColumnInfo(name = "post_date")
 
     private String postDate;
+
 
     @SerializedName("post_content")
     @ColumnInfo(name = "post_content")
@@ -65,13 +68,13 @@ public class NewsItem {
     // Add getters and setters
 
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return ID;
+    }
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getPostAuthor() {
         return postAuthor;
@@ -157,7 +160,7 @@ public class NewsItem {
     @Override
     public String toString() {
         return "NewsItem{" +
-                "id=" + id +
+                "id=" + ID +
                 ", postAuthor='" + postAuthor + '\'' +
                 ", postDate='" + postDate + '\'' +
                 ", postContent='" + postContent + '\'' +

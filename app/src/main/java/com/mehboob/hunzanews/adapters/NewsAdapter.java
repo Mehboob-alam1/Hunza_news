@@ -56,12 +56,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
 
     }
+
+    public void addItems(List<NewsItem> newItems) {
+        int startPosition = newsList.size();
+        newsList.addAll(newItems);
+        notifyItemRangeInserted(startPosition, newItems.size());
+    }
     @Override
     public int getItemCount () {
         return newsList != null ? newsList.size() : 0;
     }
     public void setNewsList(List<NewsItem> newsList) {
-        this.newsList = newsList;
+
+        int startPosition = newsList.size();
+        this.newsList.addAll(newsList);
+        notifyItemRangeInserted(startPosition, newsList.size());
+
+
         notifyDataSetChanged();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
