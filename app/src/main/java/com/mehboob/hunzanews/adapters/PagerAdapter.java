@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.mehboob.hunzanews.ui.LiveFragment;
-import com.mehboob.hunzanews.ui.MyNewsFragment;
+import com.mehboob.hunzanews.ui.ExploreFragment;
 import com.mehboob.hunzanews.ui.PopularFragment;
 import com.mehboob.hunzanews.ui.TopStoriesFragment;
 import com.mehboob.hunzanews.ui.VideoFragment;
@@ -34,7 +34,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new VideoFragment();
             case 2:
-                return new MyNewsFragment();
+                return new ExploreFragment();
             case 3:
                 return new PopularFragment();
             case 4:

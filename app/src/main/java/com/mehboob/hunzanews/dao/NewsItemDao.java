@@ -20,4 +20,7 @@ public interface NewsItemDao {
 
     @Query("Delete from allarticle")
     void deleteAll();
+    @Query("SELECT * FROM allarticle WHERE ID = :itemId")
+    NewsItem getNewsItemById(int itemId);
+
 }

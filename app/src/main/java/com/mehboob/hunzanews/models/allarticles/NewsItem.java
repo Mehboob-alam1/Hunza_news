@@ -30,6 +30,7 @@ public class NewsItem {
 
     private String postContent;
 
+
     @SerializedName("post_title")
     @ColumnInfo(name = "post_title")
 

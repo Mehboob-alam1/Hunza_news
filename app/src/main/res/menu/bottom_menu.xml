@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_today"
-        android:title="Today"
-        android:icon="@drawable/letter_h"/>
-
+    <item
+        android:id="@+id/top_stories"
+        android:icon="@drawable/baseline_newspaper_24"
+        android:title="Top Stories"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/explore"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
+        android:title="Explore"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/popular"
+        android:icon="@drawable/baseline_trending_up_24"
+        android:title="Popular"
+        app:showAsAction="withText" />
+    <item android:id="@+id/video"
+        android:title="Video"
+        app:showAsAction="withText"
+        android:icon="@drawable/baseline_ondemand_video_24"/>
+    <item android:id="@+id/live"
+        android:title="Live"
+        app:showAsAction="withText"
+        android:icon="@drawable/baseline_online_prediction_24"/>
 </menu>

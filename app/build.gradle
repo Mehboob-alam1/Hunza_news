@@ -64,4 +64,13 @@ dependencies {
     implementation "androidx.room:room-paging:$room_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$room_version"
 
+
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //html parser
+
+    implementation 'org.jsoup:jsoup:1.14.3'
+
+
 }

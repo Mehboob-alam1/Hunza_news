@@ -1,6 +1,7 @@
 package com.mehboob.hunzanews.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.mehboob.hunzanews.R;
 
 import com.mehboob.hunzanews.models.allarticles.NewsItem;
+import com.mehboob.hunzanews.ui.ArticleDetailActivity;
+import com.mehboob.hunzanews.utils.HtmlParser;
 
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private List<NewsItem> newsList;
     private Context context;
+    private OnItemClickListener onItemClickListener;
 
+    // Constructor and other necessary methods...
+
+    public interface OnItemClickListener {
+        void onItemClick(int position,NewsItem newsItem);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
     public NewsAdapter(Context context, List<NewsItem> newsList) {
         this.context = context;
         this.newsList = newsList;
@@ -39,7 +53,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         // Set data to views
         holder.titleTextView.setText(newsPost.getPostTitle());
         holder.authorTextView.setText(newsPost.getPostAuthor());
-        holder.txtContent.setText(newsPost.getPostContent());
+
+
+        holder.txtContent.setText( HtmlParser.parseHtml(newsPost.getPostContent()));
         holder.txtTime.setText(newsPost.getPostDate());
         try {
             Glide.with(context)
@@ -51,7 +67,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             // Add more as needed...
         }
 
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position,newsPost);
+            }
+        });
 
+//        holder.itemView.setOnClickListener(view -> {
+//
+//            Intent i = new Intent(context, ArticleDetailActivity.class);
+//            Gson gson= new Gson();
+//           String jsonObj= gson.toJson(newsPost);
+//           i.putExtra("obj",jsonObj);
+//           context.startActivity(i);
+//        });
 
 
 
