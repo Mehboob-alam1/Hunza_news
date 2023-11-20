@@ -48,7 +48,7 @@ import retrofit2.Response;
 public class TopStoriesFragment extends Fragment {
     private FragmentTopStoriesBinding binding;
 
-    private ArrayList<CommentCount> list;
+
 
     private NewsAdapter adapter;
 

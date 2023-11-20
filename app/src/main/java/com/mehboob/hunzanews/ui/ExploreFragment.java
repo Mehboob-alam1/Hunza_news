@@ -1,66 +1,168 @@
 package com.mehboob.hunzanews.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.mehboob.hunzanews.R;
+import com.google.gson.Gson;
+import com.mehboob.hunzanews.Repository.CategoryRepository;
+import com.mehboob.hunzanews.adapters.EntertainmentAdapter;
+import com.mehboob.hunzanews.adapters.SportsAdapter;
+import com.mehboob.hunzanews.adapters.WorldAdapter;
+import com.mehboob.hunzanews.databinding.FragmentExploreBinding;
+import com.mehboob.hunzanews.models.allarticles.CategoryItem;
+import com.mehboob.hunzanews.network.ApiClient;
+import com.mehboob.hunzanews.network.NewsApiService;
+import com.mehboob.hunzanews.viewModel.CategoryViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExploreFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExploreFragment extends Fragment {
+    private FragmentExploreBinding binding;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private CategoryViewModel categoryViewModel;
+    private CategoryRepository categoryRepository;
+    private NewsApiService apiService;
+    private static final String TAG = "ExploreFragment";
+    private WorldAdapter adapter;
+    private SportsAdapter sportsAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ExploreFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExploreFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExploreFragment newInstance(String param1, String param2) {
-        ExploreFragment fragment = new ExploreFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private EntertainmentAdapter entertainmentAdapter;
+    private LinearLayoutManager worldLayoutManager;
+    private LinearLayoutManager sportsLayoutManager;
+    private LinearLayoutManager entertainmentLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        apiService = ApiClient.getClient().create(NewsApiService.class);
+        categoryRepository = new CategoryRepository(requireActivity().getApplication());
+
+
+        categoryViewModel.getCategorizeData("world");
+        categoryViewModel.getCategorizeData("sports");
+
+        categoryViewModel.getCategorizeData("Entertainment");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_news, container, false);
+
+        binding = FragmentExploreBinding.inflate(inflater, container, false);
+
+        setViews();
+
+
+        categoryViewModel.getWorldNews().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
+            @Override
+            public void onChanged(List<CategoryItem> categoryItems) {
+
+
+                adapter.setNewsList(categoryItems);
+
+            }
+        });
+
+
+        categoryViewModel.getSports().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
+            @Override
+            public void onChanged(List<CategoryItem> categoryItems) {
+
+
+                sportsAdapter.setNewsList(categoryItems);
+
+            }
+        });
+
+        categoryViewModel.getEntertainment().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
+            @Override
+            public void onChanged(List<CategoryItem> categoryItems) {
+
+
+                Log.d(TAG, "onChanged: "+categoryItems.get(0).toString());
+
+                entertainmentAdapter.setNewsList(categoryItems);
+            }
+        });
+
+        onClicks();
+        binding.recyclerWorld.setAdapter(adapter);
+        binding.recyclerSports.setAdapter(sportsAdapter);
+        binding.recyclerEntertainment.setAdapter(entertainmentAdapter);
+
+
+        return binding.getRoot();
+    }
+
+    private void onClicks() {
+
+
+        adapter.setOnItemClickListener((position, newsItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ArticleDetailActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+            i.putExtra("obj", jsonObj);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getActivity().getApplication().startActivity(i);
+        });
+
+    }
+
+    private void setViews() {
+        adapter = new WorldAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        worldLayoutManager = new LinearLayoutManager(requireContext());
+        worldLayoutManager.setReverseLayout(true);
+        worldLayoutManager.setStackFromEnd(true);
+        binding.recyclerWorld.setLayoutManager(worldLayoutManager);
+
+// sports
+        sportsAdapter = new SportsAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        sportsLayoutManager = new LinearLayoutManager(requireContext());
+        sportsLayoutManager.setReverseLayout(true);
+        sportsLayoutManager.setStackFromEnd(true);
+        binding.recyclerSports.setLayoutManager(sportsLayoutManager);
+
+//entertainment
+        entertainmentAdapter = new EntertainmentAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        entertainmentLayoutManager = new LinearLayoutManager(requireContext());
+        entertainmentLayoutManager.setReverseLayout(true);
+        entertainmentLayoutManager.setStackFromEnd(true);
+        binding.recyclerEntertainment.setLayoutManager(entertainmentLayoutManager);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        scrollToFirstItem();
+    }
+
+    private void scrollToFirstItem() {
+        if (adapter.getItemCount() > 0) {
+            worldLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
+        }
+        if (sportsAdapter.getItemCount() > 0) {
+            sportsLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
+        }
+
+        if (entertainmentAdapter.getItemCount() > 0) {
+            entertainmentLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
+        }
     }
 }

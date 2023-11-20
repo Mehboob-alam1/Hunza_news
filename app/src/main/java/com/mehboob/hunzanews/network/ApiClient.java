@@ -8,6 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static final String BASE_URL = "https://hunzanews.net/wp-json/news-api/";
+
+
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {

@@ -3,7 +3,6 @@ package com.mehboob.hunzanews.network;
 import com.mehboob.hunzanews.models.allarticles.ApiResponse;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -14,6 +13,10 @@ public interface NewsApiService {
 
 
     //Call<ApiResponse> getAllNews();
+
+
+
+
 
     
 
