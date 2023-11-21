@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import com.mehboob.hunzanews.databinding.ActivityMainBinding;
 import com.mehboob.hunzanews.ui.ExploreFragment;
 import com.mehboob.hunzanews.ui.LiveFragment;
 import com.mehboob.hunzanews.ui.PopularFragment;
+import com.mehboob.hunzanews.ui.SettingActivity;
 import com.mehboob.hunzanews.ui.TopStoriesFragment;
 import com.mehboob.hunzanews.ui.VideoFragment;
 import com.mehboob.hunzanews.viewModel.NewsViewModel;
@@ -53,53 +55,31 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TopStoriesFragment()).commit();
 
-        binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        binding.bottomNavigation.setOnItemSelectedListener(item -> {
 
-                switch (item.getItemId()){
+            switch (item.getItemId()){
 
-                    case R.id.top_stories:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TopStoriesFragment()).commit();
-                        return true;
-                    case R.id.explore:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new ExploreFragment()).commit();
-                        return true;
-                    case R.id.popular:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new PopularFragment()).commit();
-                        return true;
-                    case R.id.video:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new VideoFragment()).commit();
-                        return true;
-                    case R.id.live:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new LiveFragment()).commit();
-                        return true;
-                }
-                return false;
+                case R.id.top_stories:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TopStoriesFragment()).commit();
+                    return true;
+                case R.id.explore:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new ExploreFragment()).commit();
+                    return true;
+                case R.id.popular:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new PopularFragment()).commit();
+                    return true;
+                case R.id.video:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new VideoFragment()).commit();
+                    return true;
+                case R.id.live:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new LiveFragment()).commit();
+                    return true;
             }
+            return false;
         });
 
-//        binding.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                binding.frameContainer.setCurrentItem(tab.getPosition());
-//                if (tab.getPosition() == 0 || tab.getPosition() == 1 || tab.getPosition() == 2 || tab.getPosition() == 3 || tab.getPosition() == 4)
-//                    adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//
-//        binding.frameContainer.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
+binding.btnSettings.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SettingActivity.class)));
 
     }
 
