@@ -108,6 +108,7 @@ private LinearLayoutManager layoutManager;
             Gson gson= new Gson();
             String jsonObj= gson.toJson(newsItem);
             i.putExtra("obj",jsonObj);
+            i.putExtra("fragment","TopStories");
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().getApplication().startActivity(i);
         });

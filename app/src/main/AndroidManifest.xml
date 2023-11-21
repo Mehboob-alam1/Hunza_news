@@ -16,6 +16,12 @@
         android:theme="@style/Theme.HunzaNews"
         tools:targetApi="31">
         <activity
+            android:name=".ui.CategorizeArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ExploreDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.ArticleDetailActivity"
             android:exported="false" />
         <activity

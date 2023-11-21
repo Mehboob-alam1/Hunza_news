@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.mehboob.hunzanews.Repository.CategoryRepository;
 import com.mehboob.hunzanews.adapters.EntertainmentAdapter;
+import com.mehboob.hunzanews.adapters.GbAdapter;
+import com.mehboob.hunzanews.adapters.PakistanAdapter;
 import com.mehboob.hunzanews.adapters.SportsAdapter;
 import com.mehboob.hunzanews.adapters.WorldAdapter;
 import com.mehboob.hunzanews.databinding.FragmentExploreBinding;
@@ -26,6 +28,8 @@ import com.mehboob.hunzanews.network.NewsApiService;
 import com.mehboob.hunzanews.viewModel.CategoryViewModel;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ExploreFragment extends Fragment {
@@ -39,9 +43,14 @@ public class ExploreFragment extends Fragment {
     private SportsAdapter sportsAdapter;
 
     private EntertainmentAdapter entertainmentAdapter;
+
+    private GbAdapter gbAdapter;
+    private PakistanAdapter pakistanAdapter;
     private LinearLayoutManager worldLayoutManager;
     private LinearLayoutManager sportsLayoutManager;
     private LinearLayoutManager entertainmentLayoutManager;
+    private LinearLayoutManager gbLinerLayoutManager;
+    private LinearLayoutManager pakLinearLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,8 @@ public class ExploreFragment extends Fragment {
         categoryViewModel.getCategorizeData("sports");
 
         categoryViewModel.getCategorizeData("Entertainment");
+        categoryViewModel.getCategorizeData("Gilgit Baltistan");
+        categoryViewModel.getCategorizeData("Pakistan");
 
     }
 
@@ -69,59 +80,180 @@ public class ExploreFragment extends Fragment {
         setViews();
 
 
-        categoryViewModel.getWorldNews().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
-            @Override
-            public void onChanged(List<CategoryItem> categoryItems) {
+        categoryViewModel.getWorldNews().observe(getViewLifecycleOwner(), categoryItems -> adapter.setNewsList(categoryItems));
 
 
-                adapter.setNewsList(categoryItems);
+        categoryViewModel.getSports().observe(getViewLifecycleOwner(), categoryItems -> sportsAdapter.setNewsList(categoryItems));
 
-            }
+
+        categoryViewModel.getGB().observe(getViewLifecycleOwner(), categoryItems -> gbAdapter.setNewsList(categoryItems));
+        categoryViewModel.getEntertainment().observe(getViewLifecycleOwner(), categoryItems -> {
+            entertainmentAdapter.setNewsList(categoryItems);
         });
 
-
-        categoryViewModel.getSports().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
-            @Override
-            public void onChanged(List<CategoryItem> categoryItems) {
+        categoryViewModel.getPakistan().observe(getViewLifecycleOwner(), categoryItems -> {
 
 
-                sportsAdapter.setNewsList(categoryItems);
-
-            }
-        });
-
-        categoryViewModel.getEntertainment().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
-            @Override
-            public void onChanged(List<CategoryItem> categoryItems) {
-
-
-                Log.d(TAG, "onChanged: "+categoryItems.get(0).toString());
-
-                entertainmentAdapter.setNewsList(categoryItems);
-            }
+            pakistanAdapter.setNewsList(categoryItems);
         });
 
         onClicks();
         binding.recyclerWorld.setAdapter(adapter);
         binding.recyclerSports.setAdapter(sportsAdapter);
         binding.recyclerEntertainment.setAdapter(entertainmentAdapter);
+        binding.recyclerGb.setAdapter(gbAdapter);
 
+        binding.recyclerPakistan.setAdapter(pakistanAdapter);
 
+fullArticles();
         return binding.getRoot();
+    }
+
+    private void fullArticles() {
+
+        binding.lineWorld.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(adapter.getNewsList());
+            i.putExtra("list",jsonObj);
+            i.putExtra("from","world");
+            getContext().startActivity(i);
+        });
+
+        binding.lineSports.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(sportsAdapter.getNewsList());
+            i.putExtra("list",jsonObj);
+            i.putExtra("from","Sports");
+            getContext().startActivity(i);
+        });
+        binding.lineEntertainment.setOnClickListener(view ->{
+            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(entertainmentAdapter.getNewsList());
+            i.putExtra("list",jsonObj);
+            i.putExtra("from","Entertain");
+            getContext().startActivity(i);
+        });
+        binding.lineGB.setOnClickListener(view -> {
+
+            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(gbAdapter.getNewsList());
+            i.putExtra("list",jsonObj);
+            i.putExtra("from","GB");
+            getContext().startActivity(i);
+
+
+        });
+
+
+        binding.linePakistan.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(pakistanAdapter.getNewsList());
+            i.putExtra("list",jsonObj);
+            i.putExtra("from","Pak");
+            getContext().startActivity(i);
+        });
     }
 
     private void onClicks() {
 
+        //world adapter
 
-        adapter.setOnItemClickListener((position, newsItem) -> {
-            Intent i = new Intent(getActivity().getApplication(), ArticleDetailActivity.class);
+        adapter.setOnItemClickListener((position, categoryItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
             Gson gson = new Gson();
-            String jsonObj = gson.toJson(newsItem);
-            i.putExtra("obj", jsonObj);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getActivity().getApplication().startActivity(i);
+            String jsonObj = gson.toJson(categoryItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
         });
 
+        //sports
+
+        sportsAdapter.setOnItemClickListener((position, newsItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //entertainment
+
+        entertainmentAdapter.setOnItemClickListener((position, newsItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+// gilgit
+
+        gbAdapter.setOnItemClickListener((position, newsItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //pakistan
+        pakistanAdapter.setOnItemClickListener((position, categoryItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(categoryItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setViews() {
@@ -144,6 +276,22 @@ public class ExploreFragment extends Fragment {
         entertainmentLayoutManager.setReverseLayout(true);
         entertainmentLayoutManager.setStackFromEnd(true);
         binding.recyclerEntertainment.setLayoutManager(entertainmentLayoutManager);
+
+        //gb
+
+        gbAdapter = new GbAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        gbLinerLayoutManager = new LinearLayoutManager(requireContext());
+        gbLinerLayoutManager.setReverseLayout(true);
+        gbLinerLayoutManager.setStackFromEnd(true);
+        binding.recyclerGb.setLayoutManager(gbLinerLayoutManager);
+
+        // pakistan
+
+        pakistanAdapter = new PakistanAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        pakLinearLayoutManager = new LinearLayoutManager(requireContext());
+        pakLinearLayoutManager.setReverseLayout(true);
+        pakLinearLayoutManager.setStackFromEnd(true);
+        binding.recyclerPakistan.setLayoutManager(pakLinearLayoutManager);
     }
 
     @Override

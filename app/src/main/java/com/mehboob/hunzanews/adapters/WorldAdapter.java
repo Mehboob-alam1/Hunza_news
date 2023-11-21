@@ -1,18 +1,23 @@
 package com.mehboob.hunzanews.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.mehboob.hunzanews.R;
 import com.mehboob.hunzanews.models.allarticles.CategoryItem;
+import com.mehboob.hunzanews.ui.ArticleDetailActivity;
 
 import java.util.List;
 
@@ -23,13 +28,7 @@ public class WorldAdapter extends RecyclerView.Adapter<WorldAdapter.CategoryHold
 int code;
     // Constructor and other necessary methods...
 
-    public interface OnItemClickListener {
-        void onItemClick(int position,CategoryItem newsItem);
-    }
 
-    public void setOnItemClickListener(WorldAdapter.OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
 
     public WorldAdapter(List<CategoryItem> newsList, Context context,int code) {
@@ -63,7 +62,25 @@ int code;
                     .into(holder.imgNews)
             ;
         } catch (Exception e) {
+ holder.itemView.setOnClickListener(view -> {
 
+            Intent i = new Intent(context, ArticleDetailActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(categoryItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e("TAG", "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(context, "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
             // Add more as needed...
         }
 
@@ -73,25 +90,38 @@ int code;
             }
         });
 
+
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position,CategoryItem categoryItem);
+    }
+
+    public void setOnItemClickListener(WorldAdapter.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     @Override
     public int getItemCount() {
         if (code==0)   // means from popular
-         return Math.min(newsList.size(), 2);
+         return Math.min(newsList.size(), 1);
         else
-            return newsList.size();
+            return newsList != null ? newsList.size() : 0;
     }
     public void setNewsList(List<CategoryItem> newsList) {
-
-       // int startPosition = newsList.size();
+        int startPosition = newsList.size();
         this.newsList.addAll(newsList);
-
-     //   notifyItemRangeInserted(startPosition, newsList.size());
+        notifyItemRangeInserted(startPosition, newsList.size());
 
 
         notifyDataSetChanged();
     }
+
+    public List<CategoryItem> getNewsList() {
+        return newsList;
+    }
+
     public class CategoryHolder extends RecyclerView.ViewHolder{
 
 

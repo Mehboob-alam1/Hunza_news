@@ -37,6 +37,8 @@ public class CategoryRepository {
     private MutableLiveData<List<CategoryItem>> hunza;
     private MutableLiveData<List<CategoryItem>> GB;
     private MutableLiveData<List<CategoryItem>> china;
+    private MutableLiveData<List<CategoryItem>> pakistan;
+
     ;
 
     private static final String TAG = "VolleyRequestExample";
@@ -55,7 +57,7 @@ public class CategoryRepository {
         hunza = new MutableLiveData<>();
         GB = new MutableLiveData<>();
         china = new MutableLiveData<>();
-
+pakistan= new MutableLiveData<>();
 
     }
 
@@ -82,6 +84,10 @@ public class CategoryRepository {
 
     public MutableLiveData<List<CategoryItem>> getGB() {
         return GB;
+    }
+
+    public MutableLiveData<List<CategoryItem>> getPakistan() {
+        return pakistan;
     }
 
     public MutableLiveData<List<CategoryItem>> getChina() {
@@ -127,12 +133,14 @@ public class CategoryRepository {
                                     education.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("Hunza")){
                                     hunza.setValue(categoryItemsList);
-                                }else if (category.equalsIgnoreCase("gb")){
-                                    education.setValue(categoryItemsList);
+                                }else if (category.equalsIgnoreCase("gb")|| category.equalsIgnoreCase("gilgit") || category.equalsIgnoreCase("Gilgit Baltistan")){
+                                    GB.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("China")){
                                     china.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("entertainment")){
                                     entertainment.setValue(categoryItemsList);
+                                }else if (category.equalsIgnoreCase("pakistan")){
+                                    pakistan.setValue(categoryItemsList);
                                 }
 
 

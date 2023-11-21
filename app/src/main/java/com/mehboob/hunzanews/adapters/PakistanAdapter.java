@@ -1,39 +1,37 @@
 package com.mehboob.hunzanews.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.mehboob.hunzanews.R;
 import com.mehboob.hunzanews.models.allarticles.CategoryItem;
+import com.mehboob.hunzanews.ui.ArticleDetailActivity;
 
 import java.util.List;
 
-public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryHolder> {
+public class PakistanAdapter extends RecyclerView.Adapter<PakistanAdapter.CategoryHolder> {
     private List<CategoryItem> newsList;
     private Context context;
-    private SportsAdapter.OnItemClickListener onItemClickListener;
+    private PakistanAdapter.OnItemClickListener onItemClickListener;
     int code;
-
     // Constructor and other necessary methods...
 
-    public interface OnItemClickListener {
-        void onItemClick(int position,CategoryItem newsItem);
-    }
-
-    public void setOnItemClickListener(SportsAdapter.OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
 
-    public SportsAdapter(List<CategoryItem> newsList, Context context,int code) {
+
+    public PakistanAdapter(List<CategoryItem> newsList, Context context,int code) {
         this.newsList = newsList;
         this.context = context;
         this.code=code;
@@ -44,11 +42,11 @@ public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryH
     public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.item_category,parent,false);
-        return new SportsAdapter.CategoryHolder(view);
+        return new CategoryHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SportsAdapter.CategoryHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryHolder holder, int position) {
         CategoryItem categoryItem = newsList.get(position);
 
         // Set data to views
@@ -64,7 +62,25 @@ public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryH
                     .into(holder.imgNews)
             ;
         } catch (Exception e) {
+            holder.itemView.setOnClickListener(view -> {
 
+                Intent i = new Intent(context, ArticleDetailActivity.class);
+                Gson gson = new Gson();
+                String jsonObj = gson.toJson(categoryItem);
+
+                if (jsonObj != null) {
+                    i.putExtra("obj", jsonObj);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                } else {
+                    // Handle the case where jsonObj is null, perhaps log an error or show a message
+                    Log.e("TAG", "jsonObj is null");
+                    // You might want to show a Toast or log the error
+                    Toast.makeText(context, "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+                }
+
+
+            });
             // Add more as needed...
         }
 
@@ -74,21 +90,25 @@ public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryH
             }
         });
 
+
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position,CategoryItem categoryItem);
+    }
+
+    public void setOnItemClickListener(PakistanAdapter.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     @Override
     public int getItemCount() {
-
         if (code==0)   // means from popular
             return Math.min(newsList.size(), 1);
         else
             return newsList != null ? newsList.size() : 0;
     }
-
-    public List<CategoryItem> getNewsList() {
-        return newsList;
-    }
-
     public void setNewsList(List<CategoryItem> newsList) {
 
         int startPosition = newsList.size();
@@ -98,6 +118,11 @@ public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryH
 
         notifyDataSetChanged();
     }
+
+    public List<CategoryItem> getNewsList() {
+        return newsList;
+    }
+
     public class CategoryHolder extends RecyclerView.ViewHolder{
 
 
@@ -116,4 +141,3 @@ public class SportsAdapter  extends RecyclerView.Adapter<SportsAdapter.CategoryH
         }
     }
 }
-

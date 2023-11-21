@@ -78,20 +78,24 @@ public class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdap
     @Override
     public int getItemCount() {
         if (code==0)   // means from popular
-            return Math.min(newsList.size(), 2);
+            return Math.min(newsList.size(), 1);
         else
-            return newsList.size();
+            return newsList != null ? newsList.size() : 0;
     }
     public void setNewsList(List<CategoryItem> newsList) {
 
-        // int startPosition = newsList.size();
+        int startPosition = newsList.size();
         this.newsList.addAll(newsList);
-
-        //   notifyItemRangeInserted(startPosition, newsList.size());
+        notifyItemRangeInserted(startPosition, newsList.size());
 
 
         notifyDataSetChanged();
     }
+
+    public List<CategoryItem> getNewsList() {
+        return newsList;
+    }
+
     public class CategoryHolder extends RecyclerView.ViewHolder{
 
 

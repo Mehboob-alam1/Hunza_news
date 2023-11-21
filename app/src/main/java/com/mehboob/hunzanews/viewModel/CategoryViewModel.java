@@ -22,6 +22,7 @@ private MutableLiveData<List<CategoryItem>> worldNews;
     private MutableLiveData<List<CategoryItem>> hunza;
     private MutableLiveData<List<CategoryItem>> GB;
     private MutableLiveData<List<CategoryItem>> china;
+    private MutableLiveData<List<CategoryItem>> pakistan;
     ;
     public CategoryViewModel(Application application) {
 
@@ -37,6 +38,7 @@ private MutableLiveData<List<CategoryItem>> worldNews;
         hunza=categoryRepository.getHunza();
         GB=categoryRepository.getGB();
         china=categoryRepository.getChina();
+        pakistan=categoryRepository.getPakistan();
 
     }
 
@@ -57,21 +59,30 @@ private MutableLiveData<List<CategoryItem>> worldNews;
         return sports;
     }
 
-    public MutableLiveData<List<CategoryItem>> getEducation() {
-        return education;
-    }
-
     public MutableLiveData<List<CategoryItem>> getEntertainment() {
         return entertainment;
-    }
-
-    public MutableLiveData<List<CategoryItem>> getHunza() {
-        return hunza;
     }
 
     public MutableLiveData<List<CategoryItem>> getGB() {
         return GB;
     }
+
+
+    public MutableLiveData<List<CategoryItem>> getPakistan() {
+        return pakistan;
+    }
+
+    public MutableLiveData<List<CategoryItem>> getEducation() {
+        return education;
+    }
+
+
+
+    public MutableLiveData<List<CategoryItem>> getHunza() {
+        return hunza;
+    }
+
+
 
     public MutableLiveData<List<CategoryItem>> getChina() {
         return china;
