@@ -3,4 +3,27 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="_5_min_read">■ <b>5</b> min read</string>
+
+
+    <string name="your_privacy_policy_text">
+        <![CDATA[
+        <b>POLICY FOR VIEWERS</b><br/><br/>
+        <b>Copyright</b><br/>
+        We are grateful that Hunza news site posts are reposted superficially. However, our policy is that while we love that people replicate and share our content, we would like our team to get the credit.<br/><br/>
+        You are free to copy and republish a site post or parts of a site post, BUT the author/contributor must be accredited some where in the new site content.<br/>
+        A link to the original site post must be included in the new site content.<br/><br/>
+        <b>Comments</b><br/>
+        Do not post obscene, indecent, hateful, offensive, defamatory, abusive, harassing or profane material.<br/>
+        Do not engage in personal attacks.<br/>
+        Vulgar and insulting nicknames will be removed. Nicknames attempting to impersonate other users will be removed.<br/>
+        Do not post information that encourages criminal activity of any kind, or any statements that may give rise to civil liability.<br/>
+        If you post a link to another site, please provide a brief explanation of where the link goes as a courtesy to other users.<br/>
+        Do not attempt to impersonate other users, site staff or any other person.<br/>
+        Lively debate and opposing opinions are welcome, but please behave courteously and responsibly.<br/>
+        Keep your messages on topic for the particular discussion you are involved in.<br/>
+        Do not use multiple account nicknames in one discussion. Do not answer your own posts using another nickname.<br/>
+        Hunza News holds the right to ask for the replicated content to be removed immediately, if the above rules are violated.<br/><br/>
+        If you have any queries about the usage of Hunza News, feel free to contact the administrator at <a href="mailto:hunzanews@gmail.com">hunzanews@gmail.com</a>.
+        ]]>
+    </string>
 </resources>

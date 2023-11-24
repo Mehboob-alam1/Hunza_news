@@ -16,6 +16,9 @@
         android:theme="@style/Theme.HunzaNews"
         tools:targetApi="31">
         <activity
+            android:name=".ui.TermsPolicyActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SettingActivity"
             android:exported="false" />
         <activity

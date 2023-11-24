@@ -53,33 +53,33 @@ public class MainActivity extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_INTERNET);
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TopStoriesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TopStoriesFragment()).commit();
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
 
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
 
                 case R.id.top_stories:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TopStoriesFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TopStoriesFragment()).commit();
                     return true;
                 case R.id.explore:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new ExploreFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExploreFragment()).commit();
                     return true;
                 case R.id.popular:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new PopularFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new PopularFragment()).commit();
                     return true;
                 case R.id.video:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new VideoFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new VideoFragment()).commit();
                     return true;
                 case R.id.live:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new LiveFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new LiveFragment()).commit();
                     return true;
             }
             return false;
         });
 
 
-binding.btnSettings.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SettingActivity.class)));
+        binding.btnSettings.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SettingActivity.class)));
 
     }
 
