@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import com.mehboob.hunzanews.Repository.CategoryRepository;
 import com.mehboob.hunzanews.adapters.EntertainmentAdapter;
 import com.mehboob.hunzanews.adapters.GbAdapter;
+import com.mehboob.hunzanews.adapters.HealthAdapter;
+import com.mehboob.hunzanews.adapters.NationalAdapter;
 import com.mehboob.hunzanews.adapters.PakistanAdapter;
 import com.mehboob.hunzanews.adapters.SportsAdapter;
 import com.mehboob.hunzanews.adapters.WorldAdapter;
@@ -46,11 +48,17 @@ public class ExploreFragment extends Fragment {
 
     private GbAdapter gbAdapter;
     private PakistanAdapter pakistanAdapter;
+
+    private NationalAdapter nationalAdapter;
+
+    private HealthAdapter healthAdapter;
     private LinearLayoutManager worldLayoutManager;
     private LinearLayoutManager sportsLayoutManager;
     private LinearLayoutManager entertainmentLayoutManager;
     private LinearLayoutManager gbLinerLayoutManager;
     private LinearLayoutManager pakLinearLayoutManager;
+    private LinearLayoutManager nationalLayoutManager;
+    private LinearLayoutManager healthLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,8 @@ public class ExploreFragment extends Fragment {
         categoryViewModel.getCategorizeData("Entertainment");
         categoryViewModel.getCategorizeData("Gilgit Baltistan");
         categoryViewModel.getCategorizeData("Pakistan");
+        categoryViewModel.getCategorizeData("National");
+        categoryViewModel.getCategorizeData("Health");
 
     }
 
@@ -96,7 +106,10 @@ public class ExploreFragment extends Fragment {
 
             pakistanAdapter.setNewsList(categoryItems);
         });
+        categoryViewModel.getNational().observe(getViewLifecycleOwner(), categoryItems -> nationalAdapter.setNewsList(categoryItems));
 
+
+        categoryViewModel.getHealth().observe(getViewLifecycleOwner(),categoryItems -> healthAdapter.setNewsList(categoryItems));
         onClicks();
         binding.recyclerWorld.setAdapter(adapter);
         binding.recyclerSports.setAdapter(sportsAdapter);
@@ -105,44 +118,47 @@ public class ExploreFragment extends Fragment {
 
         binding.recyclerPakistan.setAdapter(pakistanAdapter);
 
-fullArticles();
+        binding.recyclerNational.setAdapter(nationalAdapter);
+        binding.recyclerHealth.setAdapter(healthAdapter);
+
+        fullArticles();
         return binding.getRoot();
     }
 
     private void fullArticles() {
 
         binding.lineWorld.setOnClickListener(view -> {
-            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
             Gson gson = new Gson();
             String jsonObj = gson.toJson(adapter.getNewsList());
-            i.putExtra("list",jsonObj);
-            i.putExtra("from","world");
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "world");
             getContext().startActivity(i);
         });
 
         binding.lineSports.setOnClickListener(view -> {
-            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
             Gson gson = new Gson();
             String jsonObj = gson.toJson(sportsAdapter.getNewsList());
-            i.putExtra("list",jsonObj);
-            i.putExtra("from","Sports");
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "Sports");
             getContext().startActivity(i);
         });
-        binding.lineEntertainment.setOnClickListener(view ->{
-            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+        binding.lineEntertainment.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
             Gson gson = new Gson();
             String jsonObj = gson.toJson(entertainmentAdapter.getNewsList());
-            i.putExtra("list",jsonObj);
-            i.putExtra("from","Entertain");
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "Entertain");
             getContext().startActivity(i);
         });
         binding.lineGB.setOnClickListener(view -> {
 
-            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
             Gson gson = new Gson();
             String jsonObj = gson.toJson(gbAdapter.getNewsList());
-            i.putExtra("list",jsonObj);
-            i.putExtra("from","GB");
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "GB");
             getContext().startActivity(i);
 
 
@@ -150,11 +166,31 @@ fullArticles();
 
 
         binding.linePakistan.setOnClickListener(view -> {
-            Intent i = new Intent(getActivity().getApplication(),CategorizeArticleActivity.class);
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
             Gson gson = new Gson();
             String jsonObj = gson.toJson(pakistanAdapter.getNewsList());
-            i.putExtra("list",jsonObj);
-            i.putExtra("from","Pak");
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "Pak");
+            getContext().startActivity(i);
+        });
+
+
+        binding.lineNational.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(nationalAdapter.getNewsList());
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "Nation");
+            getContext().startActivity(i);
+        });
+
+
+        binding.lineHealth.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity().getApplication(), CategorizeArticleActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(healthAdapter.getNewsList());
+            i.putExtra("list", jsonObj);
+            i.putExtra("from", "Health");
             getContext().startActivity(i);
         });
     }
@@ -254,6 +290,45 @@ fullArticles();
                 Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        //national
+
+        nationalAdapter.setOnItemClickListener((position, newsItem) -> {
+
+
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        healthAdapter.setOnItemClickListener((position, newsItem) -> {
+            Intent i = new Intent(getActivity().getApplication(), ExploreDetailsActivity.class);
+            Gson gson = new Gson();
+            String jsonObj = gson.toJson(newsItem);
+
+            if (jsonObj != null) {
+                i.putExtra("obj", jsonObj);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplication().startActivity(i);
+            } else {
+                // Handle the case where jsonObj is null, perhaps log an error or show a message
+                Log.e(TAG, "jsonObj is null");
+                // You might want to show a Toast or log the error
+                Toast.makeText(getActivity().getApplication(), "Error: Could not retrieve article details", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setViews() {
@@ -292,6 +367,21 @@ fullArticles();
         pakLinearLayoutManager.setReverseLayout(true);
         pakLinearLayoutManager.setStackFromEnd(true);
         binding.recyclerPakistan.setLayoutManager(pakLinearLayoutManager);
+
+        // national
+        nationalAdapter = new NationalAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        nationalLayoutManager = new LinearLayoutManager(requireContext());
+        nationalLayoutManager.setReverseLayout(true);
+        nationalLayoutManager.setStackFromEnd(true);
+        binding.recyclerNational.setLayoutManager(nationalLayoutManager);
+
+
+        // health
+        healthAdapter = new HealthAdapter(new ArrayList<>(), getActivity().getApplication(), 0);
+        healthLayoutManager = new LinearLayoutManager(requireContext());
+        healthLayoutManager.setReverseLayout(true);
+        healthLayoutManager.setStackFromEnd(true);
+        binding.recyclerHealth.setLayoutManager(healthLayoutManager);
     }
 
     @Override

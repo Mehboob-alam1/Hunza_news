@@ -17,11 +17,11 @@ public class CategoryViewModel extends AndroidViewModel {
 
 private MutableLiveData<List<CategoryItem>> worldNews;
     private MutableLiveData<List<CategoryItem>> sports;
-    private MutableLiveData<List<CategoryItem>> education;
+    private MutableLiveData<List<CategoryItem>> national;
     private MutableLiveData<List<CategoryItem>> entertainment;
-    private MutableLiveData<List<CategoryItem>> hunza;
+    private MutableLiveData<List<CategoryItem>> health;
     private MutableLiveData<List<CategoryItem>> GB;
-    private MutableLiveData<List<CategoryItem>> china;
+
     private MutableLiveData<List<CategoryItem>> pakistan;
     ;
     public CategoryViewModel(Application application) {
@@ -33,11 +33,11 @@ private MutableLiveData<List<CategoryItem>> worldNews;
         worldNews=categoryRepository.getWorldNews();
 
         sports=categoryRepository.getSports();
-        education=categoryRepository.getEducation();
+        national=categoryRepository.getNational();
         entertainment=categoryRepository.getEntertainment();
-        hunza=categoryRepository.getHunza();
+        health=categoryRepository.getHealth();
         GB=categoryRepository.getGB();
-        china=categoryRepository.getChina();
+
         pakistan=categoryRepository.getPakistan();
 
     }
@@ -72,19 +72,17 @@ private MutableLiveData<List<CategoryItem>> worldNews;
         return pakistan;
     }
 
-    public MutableLiveData<List<CategoryItem>> getEducation() {
-        return education;
+    public MutableLiveData<List<CategoryItem>> getNational() {
+        return national;
     }
 
 
 
-    public MutableLiveData<List<CategoryItem>> getHunza() {
-        return hunza;
+    public MutableLiveData<List<CategoryItem>> getHealth() {
+        return health;
     }
 
 
 
-    public MutableLiveData<List<CategoryItem>> getChina() {
-        return china;
-    }
+
 }

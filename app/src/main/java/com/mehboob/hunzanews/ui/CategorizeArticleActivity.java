@@ -15,6 +15,8 @@ import com.google.gson.reflect.TypeToken;
 import com.mehboob.hunzanews.R;
 import com.mehboob.hunzanews.adapters.EntertainmentAdapter;
 import com.mehboob.hunzanews.adapters.GbAdapter;
+import com.mehboob.hunzanews.adapters.HealthAdapter;
+import com.mehboob.hunzanews.adapters.NationalAdapter;
 import com.mehboob.hunzanews.adapters.PakistanAdapter;
 import com.mehboob.hunzanews.adapters.SportsAdapter;
 import com.mehboob.hunzanews.adapters.WorldAdapter;
@@ -35,6 +37,10 @@ private EntertainmentAdapter entertainmentAdapter;
 private GbAdapter gbAdapter;
 
 private PakistanAdapter pakistanAdapter;
+
+
+private NationalAdapter nationalAdapter;
+private HealthAdapter healthAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +114,18 @@ private PakistanAdapter pakistanAdapter;
                 pakistanAdapter.setOnItemClickListener((position, categoryItem) -> onItemClick(categoryItem));
                 break;
 
-
-
+            case "Nation":
+                nationalAdapter= new NationalAdapter(list,this,1);
+                binding.recyclerCategorize.setAdapter(nationalAdapter);
+                binding.txtTitleCategory.setText("National");
+                nationalAdapter.setOnItemClickListener((position, newsItem) -> onItemClick(newsItem));
+                break;
+            case "Health":
+                healthAdapter= new HealthAdapter(list,this,1);
+                binding.recyclerCategorize.setAdapter(healthAdapter);
+                binding.txtTitleCategory.setText("Health");
+                healthAdapter.setOnItemClickListener((position, newsItem) -> onItemClick(newsItem));
+                break;
 
 
 

@@ -32,12 +32,13 @@ public class CategoryRepository {
     private Application application;
     private MutableLiveData<List<CategoryItem>> worldNews;
     private MutableLiveData<List<CategoryItem>> sports;
-    private MutableLiveData<List<CategoryItem>> education;
+    private MutableLiveData<List<CategoryItem>> national;
     private MutableLiveData<List<CategoryItem>> entertainment;
     private MutableLiveData<List<CategoryItem>> hunza;
     private MutableLiveData<List<CategoryItem>> GB;
-    private MutableLiveData<List<CategoryItem>> china;
+
     private MutableLiveData<List<CategoryItem>> pakistan;
+    private MutableLiveData<List<CategoryItem>> health;
 
     ;
 
@@ -52,12 +53,14 @@ public class CategoryRepository {
 
         worldNews = new MutableLiveData<>();
         sports = new MutableLiveData<>();
-        education = new MutableLiveData<>();
+        national = new MutableLiveData<>();
         entertainment = new MutableLiveData<>();
         hunza = new MutableLiveData<>();
         GB = new MutableLiveData<>();
-        china = new MutableLiveData<>();
+
 pakistan= new MutableLiveData<>();
+
+health=  new MutableLiveData<>();
 
     }
 
@@ -70,8 +73,8 @@ pakistan= new MutableLiveData<>();
         return sports;
     }
 
-    public MutableLiveData<List<CategoryItem>> getEducation() {
-        return education;
+    public MutableLiveData<List<CategoryItem>> getNational() {
+        return national;
     }
 
     public MutableLiveData<List<CategoryItem>> getEntertainment() {
@@ -90,8 +93,8 @@ pakistan= new MutableLiveData<>();
         return pakistan;
     }
 
-    public MutableLiveData<List<CategoryItem>> getChina() {
-        return china;
+    public MutableLiveData<List<CategoryItem>> getHealth() {
+        return health;
     }
 
     public void makeApiRequest(String category) {
@@ -129,18 +132,19 @@ pakistan= new MutableLiveData<>();
                                     worldNews.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("Sports")){
                                     sports.setValue(categoryItemsList);
-                                } else if (category.equalsIgnoreCase("education")) {
-                                    education.setValue(categoryItemsList);
+                                } else if (category.equalsIgnoreCase("national")) {
+                                    national.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("Hunza")){
                                     hunza.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("gb")|| category.equalsIgnoreCase("gilgit") || category.equalsIgnoreCase("Gilgit Baltistan")){
                                     GB.setValue(categoryItemsList);
-                                }else if (category.equalsIgnoreCase("China")){
-                                    china.setValue(categoryItemsList);
+
                                 }else if (category.equalsIgnoreCase("entertainment")){
                                     entertainment.setValue(categoryItemsList);
                                 }else if (category.equalsIgnoreCase("pakistan")){
                                     pakistan.setValue(categoryItemsList);
+                                }else if (category.equalsIgnoreCase("health")){
+                                    health.setValue(categoryItemsList);
                                 }
 
 
